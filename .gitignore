@@ -1,0 +1,56 @@
+# Python bytecode files
+*.pyc
+*.pyo
+__pycache__/
+
+# Virtual environment directories
+venv/
+env/
+.venv/
+env.bak/
+venv.bak/
+chestxray_venv/
+glcm_env/
+
+# Distribution / packaging files
+*.egg
+*.egg-info/
+dist/
+build/
+*.tar.gz
+*.whl
+
+# IDE / editor specific files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# PyCharm
+.idea/
+
+# Log files
+*.log
+
+# Test and coverage reports
+*.coverage
+*.coveragerc
+nosetests.xml
+coverage.xml
+*.hypothesis/
+
+# Temporary files
+*.bak
+*.swp
+
+
+# Data Files
+dataroot/
+.env
+Xray_data/
+*.zip
+*.pdf
+data/
