@@ -6,13 +6,15 @@ This project develops a machine learning pipeline to classify chest X-ray images
 
 ## Key Features
 
-- End-to-end workflow: image preprocessing → GLCM feature extraction → model training → evaluation
-- Classifies X-rays into COVID-19, Pneumonia, or Normal categories
-- Extracts 14 GLCM texture features including contrast, correlation, and entropy
-- Trains multiple classifiers: Logistic Regression, Random Forest, k-NN, SVM, and XGBoost
-- Model performance comparison using accuracy, classification report, and confusion matrix
-- Misclassification analysis with confusion heatmaps
-- Robust image pipeline using OpenCV and scikit-image
+- Dataset of 603 X-ray images sourced from Mendeley, aggregated from 3 public repositories
+- Preprocessing pipeline with **Roboflow object detection API** for cleaning ECG leads and text
+- Dual feature extraction:
+  - Flattened pixel arrays
+  - 36 GLCM texture features across multiple distances and angles
+- Classification with **Logistic Regression**, **Random Forest**, **SVC**, and **k-NN**
+- Feature selection using **Permutation Importance** on GLCM features
+- Model optimization using **GridSearchCV**
+- Evaluation with ROC-AUC (One-vs-Rest), precision, recall, F1-score, confusion matrices
 
 ---
 
@@ -22,7 +24,7 @@ This project develops a machine learning pipeline to classify chest X-ray images
 - Input: Chest X-ray of Pneumonia → Predicted: Pneumonia  
 - Input: Chest X-ray of Healthy lung → Predicted: Normal  
 
-Confusions occur mostly between Pneumonia and COVID-19 due to overlapping visual patterns.
+Best performance achieved by SVC model using GLCM features with low-importance features removed.
 
 ---
 
@@ -38,45 +40,50 @@ covid-xray-classifier/
 └── .gitignore
 ```
 
-
 ---
 
 ## Technologies Used
 
-- scikit-learn (ML models, evaluation)
-- OpenCV (image processing)
-- scikit-image (GLCM feature extraction)
-- NumPy, Pandas
-- Matplotlib, Seaborn
+- **scikit-learn** – classification models, feature selection, hyperparameter tuning
+- **OpenCV** – image manipulation
+- **scikit-image** – GLCM texture feature extraction
+- **Roboflow API** – ECG/text artifact removal
+- **NumPy**, **Pandas** – data processing
+- **Matplotlib**, **Seaborn** – data visualization
 
 ---
 
-## Evaluation Metrics
+## Evaluation Summary
 
-- Best model accuracy: ~88.95% (SVC Model using GLCM features based on permutation importance)
-- Confusion Matrix: Strong separation between Normal and disease classes
-- Classification Report: Balanced precision and recall; COVID-19 class slightly underperforms due to data imbalance
+| Model | Feature Set | Accuracy | Macro F1 | Macro ROC-AUC |
+|-------|-------------|----------|----------|----------------|
+| Logistic Regression | Flattened Pixels | 88.40% | 0.8825 | 0.9733 |
+| SVC | GLCM Full | 87.85% | 0.8765 | 0.9586 |
+| SVC | GLCM Selected | **88.95%** | **0.8876** | **0.9546** |
+
+- **Best overall model**: SVC using selected GLCM features
+- GLCM-based models outperform raw pixel models on Pneumonia classification
 
 ---
 
 ## Limitations
 
-- Small dataset size may limit generalizability
-- GLCM features are sensitive to image resolution and lighting
-- Performance may degrade on images from different sources or clinical settings
+- Dataset is relatively small (603 images)
+- ECG/text black-box masking may introduce minor artifacts
+- No deep learning baseline for comparison (e.g. CNN)
+- Generalization to unseen datasets may require further validation
 
 ---
 
 ## Future Work
 
-- Apply deep learning (CNNs) for improved spatial feature learning
-- Explore data augmentation to increase robustness
-- Integrate additional feature sets (e.g., wavelet transforms, HOG)
-- Build a user interface for medical staff to upload and classify X-rays
-- Add cross-validation for better model generalization
+- Expand dataset and ensure higher diversity
+- Compare against CNN and deep learning-based classifiers
+- Combine GLCM features with CNN outputs for hybrid modeling
+- Refine artifact removal using custom segmentation methods
 
 ---
 
 ## Notes
 
-This project is intended for academic and research use only. The model is **not** approved for clinical diagnosis. Feedback and contributions are welcome to improve performance and usability.
+This study demonstrates the feasibility of GLCM-based texture features for medical image classification using classical machine learning techniques. The code and models are intended for academic and experimental use only.
